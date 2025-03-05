@@ -37,7 +37,7 @@ app.get("/my-route", (req, res) => {
 apiRouter.get("/future-meals", async (req, res) => {
   try{
     const GET_FUTURE_MEALS_QUERY = "SELECT * FROM meal WHERE `when` > NOW();";
-    const [futureMeals] = await knex.raw(GET_FUTURE_MEALS_QUERY);
+    const [futureMeals, schema] = await knex.raw(GET_FUTURE_MEALS_QUERY);
     res.json(futureMeals);
   } catch (error) {
     console.error("Fetching Future Meals Error:", error);
@@ -48,7 +48,7 @@ apiRouter.get("/future-meals", async (req, res) => {
 apiRouter.get("/past-meals", async (req, res) => {
   try{
     const GET_PAST_MEALS_QUERY = "SELECT * FROM meal WHERE `when` < NOW();";
-    const [pastMeals] = await knex.raw(GET_PAST_MEALS_QUERY);
+    const [pastMeals, schema] = await knex.raw(GET_PAST_MEALS_QUERY);
     res.json(pastMeals);
   } catch (error) {
     console.error("Fetching Past Meals Error:", error);
@@ -59,7 +59,7 @@ apiRouter.get("/past-meals", async (req, res) => {
 apiRouter.get("/all-meals", async (req, res) => {
   try{
     const GET_ALL_MEALS_QUERY = "SELECT * FROM meal ORDER BY ID;";
-    const [allMeals] = await knex.raw(GET_ALL_MEALS_QUERY);
+    const [allMeals, schema] = await knex.raw(GET_ALL_MEALS_QUERY);
     res.json(allMeals);
   } catch (error) {
     console.error("Fetching All Meals Error:", error);
@@ -70,12 +70,12 @@ apiRouter.get("/all-meals", async (req, res) => {
 apiRouter.get("/first-meal", async (req, res) => {
   try{
     const GET_FIRST_MEAL_QUERY = "SELECT * FROM meal ORDER BY ID LIMIT 1;";
-    const [firstMeal] = await knex.raw(GET_FIRST_MEAL_QUERY);
+    const [firstMeal, schema] = await knex.raw(GET_FIRST_MEAL_QUERY);
 
     if(!firstMeal || firstMeal.length === 0) {
       return res.status(404).json({ error: "No available meals."});
     }
-    res.json(firstMeal);
+    res.json(firstMeal[0]);
   } catch (error) {
     console.error("Fetching Error:", error);
     res.status(500).json({ error: "Not successful" });
@@ -85,12 +85,12 @@ apiRouter.get("/first-meal", async (req, res) => {
 apiRouter.get("/last-meal", async (req, res) => {
   try{
     const GET_LAST_MEAL_QUERY = "SELECT * FROM meal ORDER BY ID DESC LIMIT 1;";
-    const [lastMeal] = await knex.raw(GET_LAST_MEAL_QUERY);
+    const [lastMeal, schema] = await knex.raw(GET_LAST_MEAL_QUERY);
 
     if(!lastMeal || lastMeal.length ===0) {
       return res.status(404).json({ error: "No available meals."});
     }
-    res.json(lastMeal);
+    res.json(lastMeal[0]);
   } catch (error) {
     console.error("Fetching Error:", error);
     res.status(500).json({ error: "Not successful" });
