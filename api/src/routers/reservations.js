@@ -35,7 +35,7 @@ reservationsRouter.post("/", async (req, res) => {
 
         const [addReservationId] = await knex("reservation").insert(reqBody);
         res.status(201).json({
-            message: "Reservation successfull added",
+            message: "Reservation successfully added",
             reservationId: addReservationId
         });
     } catch (error) {
@@ -80,7 +80,7 @@ reservationsRouter.put("/:id", async (req, res) => {
             return res.status(404).json({ message: "No matching update" })
         }
 
-        return res.status(200).json({ message: "Reservation updated successfull" });
+        return res.status(200).json({ message: "Reservation updated successfully" });
 
     } catch (error) {
         console.error("Error updating reservation", error);
@@ -101,7 +101,7 @@ reservationsRouter.delete("/:id", async (req, res) => {
             return res.status(404).json({ message: "No matching deleting" })
         }
 
-        return res.status(200).json({ message: "Reservation deleted successfull"})
+        return res.status(200).json({ message: "Reservation deleted successfully"})
     } catch (error) {
         console.error("Error deleting reservation:", error);
         res.status(500).json({ error: "Failed to delete reservation"})
