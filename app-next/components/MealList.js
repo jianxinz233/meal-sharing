@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import api from "@/utils/api";
+import styles from "./MealList.module.css";
 
 export default function MealList() {
   const [meals, setMeals] = useState([]);
@@ -33,17 +34,21 @@ export default function MealList() {
     return <p>No meals found</p>;
   }
   return (
-    <div>
-      <h1>Meals</h1>
+    <div className={styles.mealList}>
+      <h1 className={styles.heading}>Meals</h1>
       <ul>
         {meals.map((meal) => (
-          <li key={meal.id}>
-            <h2>{meal.title}</h2>
-            <p>Date: {new Date(meal.when).toLocaleString()}</p>
-            <p>Location: {meal.location}</p>
-            <p>Price: {meal.price}</p>
-            <p>Max Reservations: {meal.max_reservations}</p>
-            <p>Description: {meal.description}</p>
+          <li key={meal.id} className={styles.mealItem}>
+            <h2 className={styles.mealTitle}>{meal.title}</h2>
+            <p className={styles.mealInfo}>
+              Date: {new Date(meal.when).toLocaleString()}
+            </p>
+            <p className={styles.mealInfo}>Location: {meal.location}</p>
+            <p className={styles.mealInfo}>Price: {meal.price}</p>
+            <p className={styles.mealInfo}>
+              Max Reservations: {meal.max_reservations}
+            </p>
+            <p className={styles.mealInfo}>Description: {meal.description}</p>
           </li>
         ))}
       </ul>

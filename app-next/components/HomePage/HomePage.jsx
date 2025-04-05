@@ -8,7 +8,7 @@ import MealList from "../MealList";
 function HomePage() {
   return (
     <>
-      <a href="https://www.hackyourfuture.dk/" target="_blank" className="link">
+      {/* <a href="https://www.hackyourfuture.dk/" target="_blank" className="link">
         <Image
           src={HYFLogo.src}
           width={HYFLogo.width}
@@ -18,7 +18,7 @@ function HomePage() {
       </a>
       <a href="/nested" className="link">
         <span className="message">Go to the nested page</span>
-      </a>
+      </a> */}
       <MealList />
     </>
   );
