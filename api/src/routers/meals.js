@@ -46,9 +46,7 @@ mealsRouter.get("/", async (req, res) => {
             )
           )
           .groupBy("meal.id")
-          .havingRaw(
-            "meal.max_reservations - COALESCE(SUM(reservation.number_of_guests), 0) > 0"
-          );
+          .havingRaw("available_reservations > 0");
       } else {
         return res.status(404).json({ message: "No matching" });
       }
@@ -98,35 +96,31 @@ mealsRouter.get("/", async (req, res) => {
       meals = meals.limit(10);
     }
 
-    // sortKey
+    // sortKey & sortDir
+    let sortKey = "id";
     if (req.query.sortKey) {
       const validKeys = ["when", "max_reservations", "price"];
-      const sortKey = req.query.sortKey.toLowerCase();
-      if (validKeys.includes(sortKey)) {
-        meals = meals.orderBy(sortKey, "asc");
-      } else {
+      sortKey = req.query.sortKey.toLowerCase();
+      if (!validKeys.includes(sortKey)) {
         return res.status(400).json({ error: "Invalid sort key" });
       }
     }
 
-    // sortDir
+    let sortDir = "asc";
     if (req.query.sortDir) {
       const validDir = ["asc", "desc"];
-      const sortDir = req.query.sortDir.toLowerCase();
+      sortDir = req.query.sortDir.toLowerCase();
       if (!validDir.includes(sortDir)) {
         return res.status(400).json({ error: "Invalid sort key" });
       }
-
-      if (sortDir === "desc") {
-        meals = meals.orderBy(sortKey, "desc");
-      }
     }
+
+    meals = meals.orderBy(sortKey, sortDir);
 
     const mealsResult = await meals;
-    if (meals.length === 0) {
+    if (mealsResult.length === 0) {
       return res.status(404).json({ message: "No matching meals" });
     }
-
     res.status(200).json(mealsResult);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch meals" });
