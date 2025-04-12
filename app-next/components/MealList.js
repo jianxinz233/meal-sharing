@@ -1,7 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 import api from "@/utils/api";
-import styles from "./MealList.module.css";
+// import styles from "./MealList.module.css";
+import Meal from "./Meal";
+import { Grid, Container, Typography } from "@mui/material";
 
 export default function MealList() {
   const [meals, setMeals] = useState([]);
@@ -34,24 +36,22 @@ export default function MealList() {
     return <p>No meals found</p>;
   }
   return (
-    <div className={styles.mealList}>
-      <h1 className={styles.heading}>Meals</h1>
-      <ul>
+    <Container maxWidth="lg" sx={{ padding: "10px" }}>
+      <Typography variant="h3" component="h1" gutterBottom align="center">
+        All Meals
+      </Typography>
+      <Grid
+        container
+        spacing={3}
+        columns={{ xs: 4, sm: 8, md: 12 }}
+        justifyContent="center"
+      >
         {meals.map((meal) => (
-          <li key={meal.id} className={styles.mealItem}>
-            <h2 className={styles.mealTitle}>{meal.title}</h2>
-            <p className={styles.mealInfo}>
-              Date: {new Date(meal.when).toLocaleString()}
-            </p>
-            <p className={styles.mealInfo}>Location: {meal.location}</p>
-            <p className={styles.mealInfo}>Price: {meal.price}</p>
-            <p className={styles.mealInfo}>
-              Max Reservations: {meal.max_reservations}
-            </p>
-            <p className={styles.mealInfo}>Description: {meal.description}</p>
-          </li>
+          <Grid key={meal.id}>
+            <Meal key={meal.id} props={meal} />
+          </Grid>
         ))}
-      </ul>
-    </div>
+      </Grid>
+    </Container>
   );
 }
