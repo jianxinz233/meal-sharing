@@ -48,7 +48,7 @@ export default function MealList() {
       >
         {meals.map((meal) => (
           <Grid key={meal.id}>
-            <Meal key={meal.id} props={meal} />
+            <Meal props={meal} />
           </Grid>
         ))}
       </Grid>
