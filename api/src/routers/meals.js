@@ -92,8 +92,6 @@ mealsRouter.get("/", async (req, res) => {
           .json({ message: "Please insert a valid number" });
       }
       meals = meals.limit(limitNum);
-    } else {
-      meals = meals.limit(10);
     }
 
     // sortKey & sortDir
