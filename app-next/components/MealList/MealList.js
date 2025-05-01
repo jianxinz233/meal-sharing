@@ -37,9 +37,6 @@ export default function MealList() {
   }
   return (
     <Container maxWidth="lg" sx={{ padding: "10px" }}>
-      <Typography variant="h3" component="h1" gutterBottom align="center">
-        All Meals
-      </Typography>
       <Grid
         container
         spacing={3}

@@ -43,18 +43,18 @@ export default function MealDetailPage() {
     return <Typography variant="h6">Meal not found</Typography>;
   }
   return (
-    <>
-      <Box
-        sx={{
-          height: "calc(100vh - 64px)",
-          justifyContent: "center",
-          alignItems: "center",
-          px: 2,
-          textAlign: "center",
-        }}
-      >
-        <MealDetail props={meal} />
-      </Box>
-    </>
+    <Container
+      maxWidth="lg"
+      sx={{
+        paddingTop: "20px",
+        margin: "20px auto",
+        ustifyContent: "center",
+        alignItems: "center",
+        px: 2,
+        textAlign: "center",
+      }}
+    >
+      <MealDetail props={meal} />
+    </Container>
   );
 }

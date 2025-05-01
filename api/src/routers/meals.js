@@ -52,7 +52,7 @@ mealsRouter.get("/", async (req, res) => {
       }
     }
 
-    // title
+    // title or description
     if (req.query.title) {
       const titleKeywords = req.query.title.toLowerCase().split(" ");
 
@@ -130,6 +130,7 @@ mealsRouter.post("/", async (req, res) => {
   try {
     const reqBody = {
       title: req.body.title,
+      imgUrl: req.body.imgUrl,
       description: req.body.description,
       location: req.body.location,
       when: req.body.when,
@@ -171,6 +172,7 @@ mealsRouter.put("/:id", async (req, res) => {
     const mealId = +req.params.id;
     const reqBody = {
       title: req.body.title,
+      imgUrl: req.body.imgUrl,
       description: req.body.description,
       location: req.body.location,
       when: req.body.when,

@@ -19,6 +19,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import RestaurantMenuIcon from "@mui/icons-material/RestaurantMenu";
 import Link from "next/link";
+import SearchTool from "../Tools/SearchTool";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -40,7 +41,7 @@ export default function Navbar() {
   const toggleDrawer = (state) => () => setOpen(state);
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ height: "64px" }}>
       <AppBar
         position="fixed"
         elevation={0}
@@ -63,12 +64,10 @@ export default function Navbar() {
                 display: "flex",
                 gap: 2,
                 alignItems: "center",
-                flexGrow: 1,
-                ml: 6,
               }}
             >
               {[...pages, authLink].map((page) => (
-                <Link key={page.id} href={page.link} passHref>
+                <Link key={page.id} href={page.link}>
                   <Button
                     sx={{
                       color: "#1a1a1a",
@@ -84,11 +83,13 @@ export default function Navbar() {
                   </Button>
                 </Link>
               ))}
+
               <Switch
                 checked={darkMode}
                 onChange={() => setDarkMode(!darkMode)}
                 color="default"
               />
+              <SearchTool />
             </Box>
           ) : (
             <>
@@ -124,6 +125,9 @@ export default function Navbar() {
                     </ListItem>
                   ))}
                   <Divider />
+                  <Box sx={{ px: 2, py: 1 }}>
+                    <SearchTool showButton={true} />
+                  </Box>
                   <ListItem>
                     <Typography variant="body2">Dark Mode</Typography>
                     <Switch

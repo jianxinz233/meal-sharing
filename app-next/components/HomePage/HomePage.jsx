@@ -1,7 +1,8 @@
 "use client";
 import "./HomePage.css";
-import React from "react";
-import { TextField, Button, Typography, Box } from "@mui/material";
+import React, { useState } from "react";
+import { Typography, Box } from "@mui/material";
+import SearchTool from "../Tools/SearchTool";
 
 function HomePage() {
   return (
@@ -41,38 +42,7 @@ function HomePage() {
         >
           Find and share your next meal with us!
         </Typography>
-        <Box
-          sx={{
-            display: "flex",
-            gap: 1,
-            flexDirection: { xs: "column", sm: "row" },
-            alignItems: "center",
-          }}
-        >
-          <TextField
-            placeholder="Search meals..."
-            variant="outlined"
-            size="small"
-            sx={{
-              backgroundColor: "white",
-              borderRadius: 1,
-              minWidth: "250px",
-            }}
-          />
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: "#5a8f75",
-              "&:hover": {
-                backgroundColor: "#467961",
-              },
-              borderRadius: 1,
-              px: 4,
-            }}
-          >
-            Search
-          </Button>
-        </Box>
+        <SearchTool showButton={true} />
       </Box>
     </>
   );
