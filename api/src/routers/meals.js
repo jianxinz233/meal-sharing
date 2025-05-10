@@ -219,13 +219,16 @@ mealsRouter.get("/:meal_id/reviews", async (req, res) => {
     const mealId = req.params.meal_id;
     const matchReview = await knex("meal")
       .join("review", "meal.id", "review.meal_id")
+      .join("user", "review.userId", "user.id")
       .select(
         "meal.id AS meal_id",
+        "review.id AS review_id",
         "meal.title AS meal_title",
         "review.title AS review_title",
         "review.description AS review_description",
         "review.stars",
-        "review.created_date"
+        "review.created_date",
+        "user.full_name AS user_name"
       )
       .where({ meal_id: mealId });
 

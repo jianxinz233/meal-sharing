@@ -4,12 +4,14 @@ import api from "@/utils/api";
 import { Grid, Container, Typography, Box } from "@mui/material";
 import { useParams } from "next/navigation";
 import MealDetail from "@/components/MealDetail/MealDetail";
+import Review from "@/components/MealDetail/Review";
 
 export default function MealDetailPage() {
   const { id } = useParams();
   const [meal, setMeal] = useState();
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [reviews, setReviews] = useState();
 
   useEffect(() => {
     if (!id) {
@@ -33,6 +35,39 @@ export default function MealDetailPage() {
     fetchMealDetail();
   }, [id]);
 
+  useEffect(() => {
+    if (!id) {
+      setError("Meal ID is required");
+      setLoading(false);
+      return;
+    }
+    async function fetchReview() {
+      try {
+        const response = await fetch(api(`/meals/${id}/reviews`));
+
+        if (response.status === 404) {
+          setReviews([]);
+          setLoading(false);
+          return;
+        }
+
+        if (!response.ok) {
+          throw new Error("Response is not ok");
+        }
+        const data = await response.json();
+        if (data.message === "No matching reviews") {
+          setReviews([]);
+        } else {
+          setReviews(data);
+        }
+        setLoading(false);
+      } catch (error) {
+        setError(error.message);
+      }
+    }
+    fetchReview();
+  }, [id]);
+
   if (loading) {
     return <p>Loading meals...</p>;
   }
@@ -46,15 +81,40 @@ export default function MealDetailPage() {
     <Container
       maxWidth="lg"
       sx={{
-        paddingTop: "20px",
-        margin: "20px auto",
-        ustifyContent: "center",
-        alignItems: "center",
-        px: 2,
-        textAlign: "center",
+        mt: 8,
+        mb: 6,
       }}
     >
-      <MealDetail props={meal} />
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "column", md: "row" },
+          gap: 4,
+          alignItems: "flex-start",
+        }}
+      >
+        <Box sx={{ flex: { xs: "1 1 100%", md: 2 } }}>
+          <MealDetail props={meal} />
+        </Box>
+        <Box
+          sx={{
+            flex: { xs: "1 1 100%", md: 1 },
+            width: { xs: "100%", md: "auto" },
+          }}
+        >
+          {reviews.length === 0 ? (
+            <Typography variant="h5" color="text.secondary">
+              No reviews yet.
+            </Typography>
+          ) : (
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+              {reviews.map((review) => (
+                <Review key={review.review_id} props={review} />
+              ))}
+            </Box>
+          )}
+        </Box>
+      </Box>
     </Container>
   );
 }

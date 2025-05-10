@@ -6,7 +6,6 @@ import {
   CardContent,
   Button,
   Typography,
-  Box,
   CardActions,
 } from "@mui/material";
 
@@ -24,7 +23,7 @@ export default function MealDetail({ props }) {
   const imageUrl = `/${imgUrl.startsWith("/") ? imgUrl.slice(1) : imgUrl}`;
 
   return (
-    <Container maxWidth="lg" sx={{ padding: "20px", marginTop: "100px" }}>
+    <Container maxWidth="lg">
       <Card
         sx={{
           maxWidth: 800,
