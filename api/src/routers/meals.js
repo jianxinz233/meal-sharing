@@ -154,9 +154,17 @@ mealsRouter.get("/:id", async (req, res) => {
   try {
     const mealId = +req.params.id;
 
-    const matchMeal = await knex("meal").select("*").where({ id: mealId });
-
-    if (!matchMeal) {
+    const matchMeal = await knex("meal")
+      .leftJoin("reservation", "meal.id", "reservation.meal_id")
+      .select(
+        "meal.*",
+        knex.raw(
+          "meal.max_reservations - COALESCE(SUM(reservation.number_of_guests), 0) AS available_reservations"
+        )
+      )
+      .where("meal.id", mealId)
+      .groupBy("meal.id");
+    if (matchMeal.length === 0) {
       return res.status(404).json({ message: "No matching meal" });
     }
     return res.status(200).json(matchMeal);

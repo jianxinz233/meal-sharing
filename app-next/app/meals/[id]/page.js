@@ -32,15 +32,7 @@ export default function MealDetailPage() {
         setError(error.message);
       }
     }
-    fetchMealDetail();
-  }, [id]);
 
-  useEffect(() => {
-    if (!id) {
-      setError("Meal ID is required");
-      setLoading(false);
-      return;
-    }
     async function fetchReview() {
       try {
         const response = await fetch(api(`/meals/${id}/reviews`));
@@ -55,16 +47,13 @@ export default function MealDetailPage() {
           throw new Error("Response is not ok");
         }
         const data = await response.json();
-        if (data.message === "No matching reviews") {
-          setReviews([]);
-        } else {
-          setReviews(data);
-        }
+        setReviews(data);
         setLoading(false);
       } catch (error) {
         setError(error.message);
       }
     }
+    fetchMealDetail();
     fetchReview();
   }, [id]);
 
