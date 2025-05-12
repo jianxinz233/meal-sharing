@@ -53,10 +53,26 @@ export default function Navbar() {
         }}
       >
         <Toolbar sx={{ justifyContent: "space-between", px: { xs: 2, md: 8 } }}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <RestaurantMenuIcon />
-            <Typography variant="h6">Meal Sharing</Typography>
-          </Box>
+          <Link href="/" style={{ textDecoration: "none" }}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                color: "#1a1a1a",
+                fontWeight: 500,
+                textTransform: "none",
+
+                "&:hover": {
+                  color: "#5a8f75",
+                  backgroundColor: "transparent",
+                },
+              }}
+            >
+              <RestaurantMenuIcon />
+              <Typography variant="h6">Meal Sharing</Typography>
+            </Box>
+          </Link>
 
           {!isMobile ? (
             <Box
