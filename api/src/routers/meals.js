@@ -34,20 +34,17 @@ mealsRouter.get("/", async (req, res) => {
           .status(400)
           .json({ message: "Please insert a valid number" });
       }
-      meals = meals.where("price", ">=", maxPrice);
-    }
-
-    if (req.query.availableReservations) {
+      meals = meals.where("price", "<=", maxPrice);
     }
 
     // availableReservations
-    if (req.query.availableReservations) {
+    if (req.query.availableReservations !== undefined) {
       const isAvailable =
         req.query.availableReservations.toLowerCase() === "true";
       if (isAvailable) {
         meals = meals.havingRaw("available_reservations > 0");
       } else {
-        return res.status(404).json({ message: "No matching" });
+        meals = meals.havingRaw("available_reservations = 0");
       }
     }
 
@@ -115,9 +112,7 @@ mealsRouter.get("/", async (req, res) => {
     meals = meals.orderBy(sortKey, sortDir);
 
     const mealsResult = await meals;
-    if (mealsResult.length === 0) {
-      return res.status(404).json({ message: "No matching meals" });
-    }
+
     res.status(200).json(mealsResult);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch meals" });
