@@ -16,7 +16,15 @@ const mealsRouter = express.Router();
 // GET /api/meals with query parameters
 mealsRouter.get("/", async (req, res) => {
   try {
-    let meals = knex("meal");
+    let meals = knex("meal")
+      .leftJoin("reservation", "meal.id", "reservation.meal_id")
+      .select(
+        "meal.*",
+        knex.raw(
+          "meal.max_reservations - COALESCE(SUM(reservation.number_of_guests), 0) AS available_reservations"
+        )
+      )
+      .groupBy("meal.id");
 
     // maxPrice
     if (req.query.maxPrice) {
@@ -37,16 +45,7 @@ mealsRouter.get("/", async (req, res) => {
       const isAvailable =
         req.query.availableReservations.toLowerCase() === "true";
       if (isAvailable) {
-        meals = meals
-          .leftJoin("reservation", "meal.id", "reservation.meal_id")
-          .select(
-            "meal.*",
-            knex.raw(
-              "meal.max_reservations - COALESCE(SUM(reservation.number_of_guests), 0) AS available_reservations"
-            )
-          )
-          .groupBy("meal.id")
-          .havingRaw("available_reservations > 0");
+        meals = meals.havingRaw("available_reservations > 0");
       } else {
         return res.status(404).json({ message: "No matching" });
       }

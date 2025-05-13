@@ -21,6 +21,7 @@ export default function Meal({ props }) {
     max_reservations,
     description,
     imgUrl,
+    available_reservations,
   } = props;
 
   return (
@@ -92,10 +93,27 @@ export default function Meal({ props }) {
               </Typography>
             </CardContent>
           </CardActionArea>
-          <CardActions sx={{ padding: "16px" }}>
-            <Button size="medium" color="primary" variant="contained">
-              Reserve
-            </Button>
+          <CardActions
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              padding: "16px",
+              justifyContent: "center",
+              gap: 4,
+            }}
+          >
+            <Typography variant="body1" fontWeight="bold">
+              Available Reservations: {available_reservations}
+            </Typography>
+            {available_reservations > 0 ? (
+              <Button size="medium" color="primary" variant="contained">
+                Reserve
+              </Button>
+            ) : (
+              <Button size="medium" variant="contained" disabled>
+                Reserve
+              </Button>
+            )}
           </CardActions>
         </Link>
       </Card>

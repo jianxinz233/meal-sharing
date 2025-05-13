@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import api from "@/utils/api";
-// import styles from "./MealList.module.css";
 import Meal from "./Meal";
 import { Grid, Container, Typography } from "@mui/material";
 
