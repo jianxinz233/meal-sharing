@@ -60,7 +60,6 @@ npm run dev
 ```
 
 You can then test the API using [Postman](https://www.postman.com/) at [http://localhost:3001/api](http://localhost:3001/api).
-![Testing the API with Postman](./images/api_test.png)
 
 In the second terminal run the following commands:
 
@@ -71,4 +70,3 @@ npm run dev
 ```
 
 You can then open the web app at [http://localhost:3000](http://localhost:3000).
-![Testing the app with a browser](./images/app_test.png)
