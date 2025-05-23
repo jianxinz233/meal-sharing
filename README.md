@@ -6,9 +6,9 @@ This is a full-stack web application built with **React, Next.js, JavaScript**, 
 
 ## 🖼️ Screenshots
 
-| Desktop View                                                                | Mobile View                                                               |
-| --------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| <img src="./images/msawebsitess.png" alt="Desktop Screenshot" height="300"> | <img src="./images/msamobiless.png" alt="Mobile Screenshot" height="300"> |
+| Desktop View                                                               | Mobile View                                                              |
+| -------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| <img src="./images/msawebsitess.png" alt="Desktop Screenshot" width="300"> | <img src="./images/msamobiless.png" alt="Mobile Screenshot" width="130"> |
 
 ---
 
@@ -42,6 +42,14 @@ This is a full-stack web application built with **React, Next.js, JavaScript**, 
 - 📱 **Responsive Navigation** with Hamburger Menu on mobile
 - 🔐 **User Login & Authentication** -- in progress
 
+---
+
+## 🗂️ Project Structure
+
+### Project Diagram
+
+ <img src="./images/MSDiagram.png" alt="Diagram" width="450">
+ 
 ---
 
 ## Getting started
