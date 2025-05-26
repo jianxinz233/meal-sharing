@@ -1,36 +1,49 @@
-import HYFLogo from "@/assets/hyf.svg";
-import Image from "next/image";
+"use client";
 import "./HomePage.css";
-import React from "react";
-import MealList from "../MealList";
-import { Container, Typography, Box } from "@mui/material";
+import React, { useState } from "react";
+import { Typography, Box } from "@mui/material";
+import SearchTool from "../Tools/SearchTool";
 
-// Feel free to replace the content of this component with your own
 function HomePage() {
   return (
     <>
-      {/* <a href="https://www.hackyourfuture.dk/" target="_blank" className="link">
-        <Image
-          src={HYFLogo.src}
-          width={HYFLogo.width}
-          height={HYFLogo.height}
-          className="logo"
-        />
-      </a>
-      <a href="/nested" className="link">
-        <span className="message">Go to the nested page</span>
-      </a> */}
-      <Container maxWidth="lg" sx={{ paddingTop: "20px" }}>
-        <Typography variant="h3" component="h1" gutterBottom align="center">
-          Welcome to the Meal Sharing
+      <Box
+        sx={{
+          height: "calc(100vh - 64px)",
+          backgroundImage: "url(/meal_sharing_welcome.png)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          px: 2,
+          textAlign: "center",
+        }}
+      >
+        <Typography
+          variant="h3"
+          sx={{
+            color: "white",
+            fontWeight: 600,
+            mb: 3,
+            textShadow: "1px 1px 3px rgba(0,0,0,0.5)",
+          }}
+        >
+          Welcome to Meal Sharing
         </Typography>
-        <Typography variant="h5" component="h2" gutterBottom align="center">
-          Find your next meal
+        <Typography
+          variant="h6"
+          sx={{
+            color: "white",
+            mb: 4,
+            textShadow: "1px 1px 3px rgba(0,0,0,0.4)",
+          }}
+        >
+          Find and share your next meal with us!
         </Typography>
-        <Box sx={{ padding: "20px" }}>
-          <MealList />
-        </Box>
-      </Container>
+        <SearchTool showButton={true} />
+      </Box>
     </>
   );
 }

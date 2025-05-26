@@ -7,6 +7,7 @@ import nestedRouter from "./routers/nested.js";
 import mealsRouter from "./routers/meals.js";
 import reservationsRouter from "./routers/reservations.js";
 import reviewsRouter from "./routers/reviews.js";
+import authRouter from "./routers/auth.js";
 
 const app = express();
 app.use(cors());
@@ -29,7 +30,7 @@ apiRouter.use("/nested", nestedRouter);
 apiRouter.use("/meals", mealsRouter);
 apiRouter.use("/reservations", reservationsRouter);
 apiRouter.use("/reviews", reviewsRouter);
-
+apiRouter.use("/auth", authRouter);
 
 app.use("/api", apiRouter);
 
@@ -42,7 +43,7 @@ app.get("/my-route", (req, res) => {
 });
 
 apiRouter.get("/future-meals", async (req, res) => {
-  try{
+  try {
     const GET_FUTURE_MEALS_QUERY = "SELECT * FROM meal WHERE `when` > NOW();";
     const [futureMeals, schema] = await knex.raw(GET_FUTURE_MEALS_QUERY);
     res.json(futureMeals);
@@ -53,7 +54,7 @@ apiRouter.get("/future-meals", async (req, res) => {
 });
 
 apiRouter.get("/past-meals", async (req, res) => {
-  try{
+  try {
     const GET_PAST_MEALS_QUERY = "SELECT * FROM meal WHERE `when` < NOW();";
     const [pastMeals, schema] = await knex.raw(GET_PAST_MEALS_QUERY);
     res.json(pastMeals);
@@ -64,7 +65,7 @@ apiRouter.get("/past-meals", async (req, res) => {
 });
 
 apiRouter.get("/all-meals", async (req, res) => {
-  try{
+  try {
     const GET_ALL_MEALS_QUERY = "SELECT * FROM meal ORDER BY ID;";
     const [allMeals, schema] = await knex.raw(GET_ALL_MEALS_QUERY);
     res.json(allMeals);
@@ -75,12 +76,12 @@ apiRouter.get("/all-meals", async (req, res) => {
 });
 
 apiRouter.get("/first-meal", async (req, res) => {
-  try{
+  try {
     const GET_FIRST_MEAL_QUERY = "SELECT * FROM meal ORDER BY ID LIMIT 1;";
     const [firstMeal, schema] = await knex.raw(GET_FIRST_MEAL_QUERY);
 
-    if(!firstMeal || firstMeal.length === 0) {
-      return res.status(404).json({ error: "No available meals."});
+    if (!firstMeal || firstMeal.length === 0) {
+      return res.status(404).json({ error: "No available meals." });
     }
     res.json(firstMeal[0]);
   } catch (error) {
@@ -90,12 +91,12 @@ apiRouter.get("/first-meal", async (req, res) => {
 });
 
 apiRouter.get("/last-meal", async (req, res) => {
-  try{
+  try {
     const GET_LAST_MEAL_QUERY = "SELECT * FROM meal ORDER BY ID DESC LIMIT 1;";
     const [lastMeal, schema] = await knex.raw(GET_LAST_MEAL_QUERY);
 
-    if(!lastMeal || lastMeal.length ===0) {
-      return res.status(404).json({ error: "No available meals."});
+    if (!lastMeal || lastMeal.length === 0) {
+      return res.status(404).json({ error: "No available meals." });
     }
     res.json(lastMeal[0]);
   } catch (error) {

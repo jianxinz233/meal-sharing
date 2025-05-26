@@ -16,7 +16,15 @@ const mealsRouter = express.Router();
 // GET /api/meals with query parameters
 mealsRouter.get("/", async (req, res) => {
   try {
-    let meals = knex("meal");
+    let meals = knex("meal")
+      .leftJoin("reservation", "meal.id", "reservation.meal_id")
+      .select(
+        "meal.*",
+        knex.raw(
+          "meal.max_reservations - COALESCE(SUM(reservation.number_of_guests), 0) AS available_reservations"
+        )
+      )
+      .groupBy("meal.id");
 
     // maxPrice
     if (req.query.maxPrice) {
@@ -26,33 +34,21 @@ mealsRouter.get("/", async (req, res) => {
           .status(400)
           .json({ message: "Please insert a valid number" });
       }
-      meals = meals.where("price", ">=", maxPrice);
-    }
-
-    if (req.query.availableReservations) {
+      meals = meals.where("price", "<=", maxPrice);
     }
 
     // availableReservations
-    if (req.query.availableReservations) {
+    if (req.query.availableReservations !== undefined) {
       const isAvailable =
         req.query.availableReservations.toLowerCase() === "true";
       if (isAvailable) {
-        meals = meals
-          .leftJoin("reservation", "meal.id", "reservation.meal_id")
-          .select(
-            "meal.*",
-            knex.raw(
-              "meal.max_reservations - COALESCE(SUM(reservation.number_of_guests), 0) AS available_reservations"
-            )
-          )
-          .groupBy("meal.id")
-          .havingRaw("available_reservations > 0");
+        meals = meals.havingRaw("available_reservations > 0");
       } else {
-        return res.status(404).json({ message: "No matching" });
+        meals = meals.havingRaw("available_reservations = 0");
       }
     }
 
-    // title
+    // title or description
     if (req.query.title) {
       const titleKeywords = req.query.title.toLowerCase().split(" ");
 
@@ -92,8 +88,6 @@ mealsRouter.get("/", async (req, res) => {
           .json({ message: "Please insert a valid number" });
       }
       meals = meals.limit(limitNum);
-    } else {
-      meals = meals.limit(10);
     }
 
     // sortKey & sortDir
@@ -118,9 +112,7 @@ mealsRouter.get("/", async (req, res) => {
     meals = meals.orderBy(sortKey, sortDir);
 
     const mealsResult = await meals;
-    if (mealsResult.length === 0) {
-      return res.status(404).json({ message: "No matching meals" });
-    }
+
     res.status(200).json(mealsResult);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch meals" });
@@ -132,6 +124,7 @@ mealsRouter.post("/", async (req, res) => {
   try {
     const reqBody = {
       title: req.body.title,
+      imgUrl: req.body.imgUrl,
       description: req.body.description,
       location: req.body.location,
       when: req.body.when,
@@ -155,9 +148,17 @@ mealsRouter.get("/:id", async (req, res) => {
   try {
     const mealId = +req.params.id;
 
-    const matchMeal = await knex("meal").select("*").where({ id: mealId });
-
-    if (!matchMeal) {
+    const matchMeal = await knex("meal")
+      .leftJoin("reservation", "meal.id", "reservation.meal_id")
+      .select(
+        "meal.*",
+        knex.raw(
+          "meal.max_reservations - COALESCE(SUM(reservation.number_of_guests), 0) AS available_reservations"
+        )
+      )
+      .where("meal.id", mealId)
+      .groupBy("meal.id");
+    if (matchMeal.length === 0) {
       return res.status(404).json({ message: "No matching meal" });
     }
     return res.status(200).json(matchMeal);
@@ -173,6 +174,7 @@ mealsRouter.put("/:id", async (req, res) => {
     const mealId = +req.params.id;
     const reqBody = {
       title: req.body.title,
+      imgUrl: req.body.imgUrl,
       description: req.body.description,
       location: req.body.location,
       when: req.body.when,
@@ -219,13 +221,16 @@ mealsRouter.get("/:meal_id/reviews", async (req, res) => {
     const mealId = req.params.meal_id;
     const matchReview = await knex("meal")
       .join("review", "meal.id", "review.meal_id")
+      .join("user", "review.userId", "user.id")
       .select(
         "meal.id AS meal_id",
+        "review.id AS review_id",
         "meal.title AS meal_title",
         "review.title AS review_title",
         "review.description AS review_description",
         "review.stars",
-        "review.created_date"
+        "review.created_date",
+        "user.full_name AS user_name"
       )
       .where({ meal_id: mealId });
 

@@ -15,7 +15,7 @@ const reviewsRouter = express.Router();
 
 // GET /reviews
 reviewsRouter.get("/", async (req, res) => {
-  const allReviews = (await knex("review").select("*").orderBy("id")).limit(10);
+  const allReviews = await knex("review").select("*").orderBy("id");
   if (allReviews.length === 0) {
     return res.status(404).json({ message: "No matching reviews" });
   }

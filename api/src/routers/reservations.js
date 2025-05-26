@@ -16,10 +16,7 @@ const reservationsRouter = express.Router();
 // GET /api/reservations
 reservationsRouter.get("/", async (req, res) => {
   try {
-    const allReservations = await knex("reservation")
-      .select("*")
-      .orderBy("id")
-      .limit(10);
+    const allReservations = await knex("reservation").select("*").orderBy("id");
     if (allReservations.length === 0) {
       return res.status(404).json({ message: "No matching reservations" });
     }
