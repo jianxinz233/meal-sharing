@@ -5,11 +5,8 @@ import { Box, Container } from "@mui/material";
 function AddMealPage() {
   return (
     <>
-      <Box sx={{ height: "calc(100vh - 64px)" }}>
-        <Container
-          maxWidth="lg"
-          sx={{ paddingTop: "20px", marginTop: "100px" }}
-        >
+      <Box>
+        <Container maxWidth="lg" sx={{ paddingTop: "20px", marginTop: "60px" }}>
           <MealForm />
         </Container>
       </Box>
