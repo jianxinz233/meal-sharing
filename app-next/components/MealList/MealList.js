@@ -50,8 +50,7 @@ export default function MealList() {
       }
 
       const url = query.toString() ? `/meals?${query}` : "/meals";
-      console.log(url); // Log the final URL to inspect the query string
-
+      console.log(url);
       const response = await fetch(api(url));
       if (response.ok) {
         const data = await response.json();

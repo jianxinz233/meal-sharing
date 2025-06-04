@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Container,
   CardMedia,
@@ -8,8 +8,13 @@ import {
   Typography,
   CardActions,
 } from "@mui/material";
+import ReservationModal from "../Tools/ReservationModal";
 
 export default function MealDetail({ props }) {
+  const [modalOpen, setModalOpen] = useState(false);
+  const handleOpenModal = () => setModalOpen(true);
+  const handleCloseModal = () => setModalOpen(false);
+
   const {
     id,
     title,
@@ -75,7 +80,12 @@ export default function MealDetail({ props }) {
             Available Reservations: {available_reservations}
           </Typography>
           {available_reservations > 0 ? (
-            <Button size="medium" color="primary" variant="contained">
+            <Button
+              size="medium"
+              color="primary"
+              variant="contained"
+              onClick={handleOpenModal}
+            >
               Reserve
             </Button>
           ) : (
@@ -85,6 +95,11 @@ export default function MealDetail({ props }) {
           )}
         </CardActions>
       </Card>
+      <ReservationModal
+        open={modalOpen}
+        onClose={handleCloseModal}
+        meal={props}
+      />
     </Container>
   );
 }

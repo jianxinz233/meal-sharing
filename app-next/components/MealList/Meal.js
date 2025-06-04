@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
@@ -10,6 +10,7 @@ import {
   CardActions,
 } from "@mui/material";
 import Link from "next/link";
+import ReservationModal from "../Tools/ReservationModal";
 
 export default function Meal({ props }) {
   const {
@@ -23,6 +24,10 @@ export default function Meal({ props }) {
     imgUrl,
     available_reservations,
   } = props;
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const handleOpenModal = () => setModalOpen(true);
+  const handleCloseModal = () => setModalOpen(false);
 
   return (
     <Grid
@@ -93,30 +98,40 @@ export default function Meal({ props }) {
               </Typography>
             </CardContent>
           </CardActionArea>
-          <CardActions
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              padding: "16px",
-              justifyContent: "center",
-              gap: 4,
-            }}
-          >
-            <Typography variant="body1" fontWeight="bold">
-              Available Reservations: {available_reservations}
-            </Typography>
-            {available_reservations > 0 ? (
-              <Button size="medium" color="primary" variant="contained">
-                Reserve
-              </Button>
-            ) : (
-              <Button size="medium" variant="contained" disabled>
-                Reserve
-              </Button>
-            )}
-          </CardActions>
         </Link>
+        <CardActions
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            padding: "16px",
+            justifyContent: "center",
+            gap: 4,
+          }}
+        >
+          <Typography variant="body1" fontWeight="bold">
+            Available Reservations: {available_reservations}
+          </Typography>
+          {available_reservations > 0 ? (
+            <Button
+              size="medium"
+              color="primary"
+              variant="contained"
+              onClick={handleOpenModal}
+            >
+              Reserve
+            </Button>
+          ) : (
+            <Button size="medium" variant="contained" disabled>
+              Reserve
+            </Button>
+          )}
+        </CardActions>
       </Card>
+      <ReservationModal
+        open={modalOpen}
+        onClose={handleCloseModal}
+        meal={props}
+      />
     </Grid>
   );
 }
