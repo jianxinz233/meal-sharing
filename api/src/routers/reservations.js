@@ -29,18 +29,53 @@ reservationsRouter.get("/", async (req, res) => {
 // POST /api/reservations
 reservationsRouter.post("/", async (req, res) => {
   try {
-    const reqBody = {
-      number_of_guests: req.body.number_of_guests,
-      meal_id: req.body.meal_id,
-      contact_phonenumber: req.body.contact_phonenumber,
-      contact_name: req.body.contact_name,
-      contact_email: req.body.contact_email,
-    };
+    const {
+      meal_id,
+      number_of_guests,
+      contact_phonenumber,
+      contact_name,
+      contact_email,
+    } = req.body;
 
-    const [addReservationId] = await knex("reservation").insert(reqBody);
+    const meal = await knex("meal").where({ id: meal_id }).first();
+    if (!meal) return res.status(404).json({ error: "Meal not found" });
+
+    const { total_reserved } = await knex("reservation")
+      .where({ meal_id })
+      .sum("number_of_guests as total_reserved")
+      .first();
+
+    const currentReserved = Number(total_reserved) || 0;
+    const availableSpots = meal.max_reservations - currentReserved;
+
+    if (number_of_guests > availableSpots) {
+      return res.status(400).json({ error: "Not enough available spots" });
+    }
+
+    let user = await knex("user").where({ email: contact_email }).first();
+
+    if (!user) {
+      const [user_id] = await knex("user").insert(
+        {
+          name: contact_name,
+          email: contact_email,
+        },
+        ["id"]
+      );
+      user = { id: user_id };
+    }
+    const [reservationId] = await knex("reservation").insert({
+      meal_id,
+      userId: user.id,
+      number_of_guests,
+      contact_phonenumber,
+      contact_name,
+      contact_email,
+    });
+
     res.status(201).json({
       message: "Reservation successfully added",
-      reservationId: addReservationId,
+      reservationId,
     });
   } catch (error) {
     console.error("Error adding reservation:", error);
